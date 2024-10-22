@@ -10,7 +10,14 @@ router.get("/", (req, res) => {
     })
 
 })
-
+/*
+{
+  id: "qn",
+  text: "?",
+  answers: ["1", "2", "3", "4"],
+  correctAnswer: "1",
+}
+*/
 const questions = [
     {
         id: "q1",
@@ -26,11 +33,17 @@ const questions = [
       },
       {
         id: "q3",
-        text: "Hur många ben har en gnu?",
-        answers: ["två", "sju", "tre", "fyra"],
-        correctAnswer: "fyra",
-      }
-
+        text: "Vart bor Oscar?",
+        answers: ["Gumboda", "Flurkmark", "Burträsk", "Bjurholm"],
+        correctAnswer: "Bjurholm",
+      },
+      {
+        id: "q4",
+        text: "Vilket spel är mest nörd?",
+        answers: ["Marvel crisis protocol", "WH 40K", "WH AoS", "WH Killteam"],
+        correctAnswer: "Marvel crisis protocol",
+      },
+     
 ]
 
 router.get("/questions", (req, res) => {
@@ -45,14 +58,21 @@ router.get("/questions", (req, res) => {
 
 router.post("/end", (req, res) => {
     const answers = req.body
-    console.log(answers)  
-    questions.forEach(question => {
+    
+    console.log(answers)
+    const result = questions.map(question => {
+    
       const answer = answers[question.id]
-      if (answer == question.correctAnswer) {
-        console.log("Du har svarat rätt på fråga : ", question.id)
+      return {
+        question: question.text,
+        answer,
+        correct: answer == question.correctAnswer
       }
     })
-    res.json(answers)
+    res.render("result.njk", {
+      message: "Ditt resultat",
+      result
+    })
   })
 
 
